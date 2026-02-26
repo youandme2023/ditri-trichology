@@ -678,8 +678,49 @@
 <link rel="apple-touch-startup-image" href="splash/splash-1620x2160.png" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <link rel="apple-touch-startup-image" href="splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 
+
+<style id="ditri-splash-style">
+  /* In-app splash (shows on every launch) */
+  #ditriSplash {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    transition: opacity 650ms ease;
+    opacity: 1;
+  }
+  #ditriSplash.hidden { opacity: 0; pointer-events: none; }
+
+  #ditriSplashLogo {
+    width: min(52vw, 220px);
+    height: auto;
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+    animation: ditriLogoFadeIn 900ms ease forwards;
+    animation-delay: 450ms;
+  }
+  @keyframes ditriLogoFadeIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #ditriSplashLogo { animation: none; opacity: 1; transform: none; }
+    #ditriSplash { transition: none; }
+  }
+</style>
+
 </head>
 <body>
+
+<!-- Ditri in-app splash -->
+<div id="ditriSplash" aria-hidden="true">
+  <img id="ditriSplashLogo" src="assets/splash-logo.png" alt="Ditri Trichology">
+</div>
+
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
@@ -3668,6 +3709,26 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(()=>{});
   });
 }
+</script>
+
+
+<script id="ditri-splash-script">
+  (function () {
+    const splash = document.getElementById('ditriSplash');
+    if (!splash) return;
+
+    const hide = () => {
+      // wait a bit so user sees the logo fade in
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        setTimeout(() => splash.remove(), 750);
+      }, 900);
+    };
+
+    // Hide on load; also safety timeout in case load doesn't fire
+    window.addEventListener('load', hide, { once: true });
+    setTimeout(hide, 3500);
+  })();
 </script>
 
 </body>
