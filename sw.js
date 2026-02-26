@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ditri-tricho-v2';
+const CACHE_NAME = 'ditri-tricho-v3';
 const ASSETS = [
   './',
   './index.html',

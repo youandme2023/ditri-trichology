@@ -689,8 +689,8 @@
     align-items: center;
     justify-content: center;
     z-index: 999999;
-    transition: opacity 650ms ease;
     opacity: 1;
+    transition: opacity 2000ms ease; /* slow fade-out */
   }
   #ditriSplash.hidden { opacity: 0; pointer-events: none; }
 
@@ -698,9 +698,9 @@
     width: min(52vw, 220px);
     height: auto;
     opacity: 0;
-    transform: translateY(6px) scale(0.985);
-    animation: ditriLogoFadeIn 900ms ease forwards;
-    animation-delay: 450ms;
+    transform: translateY(10px) scale(0.98);
+    animation: ditriLogoFadeIn 2500ms ease forwards; /* slow fade-in */
+    animation-delay: 1500ms; /* white screen first */
   }
   @keyframes ditriLogoFadeIn {
     to { opacity: 1; transform: translateY(0) scale(1); }
@@ -3715,19 +3715,40 @@ if ('serviceWorker' in navigator) {
 <script id="ditri-splash-script">
   (function () {
     const splash = document.getElementById('ditriSplash');
-    if (!splash) return;
+    const logo = document.getElementById('ditriSplashLogo');
+    if (!splash || !logo) return;
 
-    const hide = () => {
-      // wait a bit so user sees the logo fade in
+    // Timeline (very slow):
+    // 0–1.5s: white screen
+    // 1.5–4.0s: logo fades in
+    // 4.0–5.5s: logo stays
+    // 5.5–7.5s: splash fades out, then removed
+    const FADE_IN_DELAY = 1500;
+    const FADE_IN_DURATION = 2500;
+    const HOLD_AFTER_IN = 1500;
+    const FADE_OUT_DURATION = 2000;
+
+    const total = FADE_IN_DELAY + FADE_IN_DURATION + HOLD_AFTER_IN;
+
+    const start = () => {
+      // Ensure splash is visible
+      splash.classList.remove('hidden');
+
+      // Hide after full sequence
       setTimeout(() => {
         splash.classList.add('hidden');
-        setTimeout(() => splash.remove(), 750);
-      }, 900);
+        setTimeout(() => {
+          try { splash.remove(); } catch(e) {}
+        }, FADE_OUT_DURATION + 150);
+      }, total);
     };
 
-    // Hide on load; also safety timeout in case load doesn't fire
-    window.addEventListener('load', hide, { once: true });
-    setTimeout(hide, 3500);
+    // Start as soon as possible
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+
+    // Safety: if load never fires, still run
+    setTimeout(start, 800);
   })();
 </script>
 
