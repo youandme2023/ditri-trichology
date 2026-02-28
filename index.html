@@ -655,71 +655,54 @@
   input[type="file"] { display: none; }
 </style>
 
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+body {
+  font-size: 19px !important;
+  color: #111 !important;
+}
+h1,h2,h3 {
+  font-size: 1.7em !important;
+  color:#000 !important;
+}
+button,input,select,textarea {
+  font-size:1.05em !important;
+}
+</style>
 
 
-<!-- iOS Splash Screens -->
-<link rel="apple-touch-startup-image" href="splash/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1640x2360.png" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1620x2160.png" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-<link rel="apple-touch-startup-image" href="splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-
-
-<style id="ditri-splash-style">
-  /* In-app splash (shows on every launch) */
-  #ditriSplash {
-    position: fixed;
-    inset: 0;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999999;
-    opacity: 1;
-    transition: opacity 2000ms ease; /* slow fade-out */
-  }
-  #ditriSplash.hidden { opacity: 0; pointer-events: none; }
-
-  #ditriSplashLogo {
-    width: min(52vw, 220px);
-    height: auto;
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-    animation: ditriLogoFadeIn 2500ms ease forwards; /* slow fade-in */
-    animation-delay: 1500ms; /* white screen first */
-  }
-  @keyframes ditriLogoFadeIn {
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* Respect reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    #ditriSplashLogo { animation: none; opacity: 1; transform: none; }
-    #ditriSplash { transition: none; }
-  }
+<style>
+#ditriSplash{
+ position:fixed;
+ inset:0;
+ background:#ffffff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:999999;
+ opacity:1;
+ transition:opacity 4000ms ease;
+}
+#ditriSplash.hidden{opacity:0;}
+#ditriSplash img{
+ width:300px;
+ opacity:0;
+ animation:fadeIn 3500ms ease forwards;
+ animation-delay:2500ms;
+}
+@keyframes fadeIn{
+ to{opacity:1;}
+}
+#appContent{opacity:0;transition:opacity 2000ms ease;}
+#appContent.visible{opacity:1;}
 </style>
 
 </head>
 <body>
 
-<!-- Ditri in-app splash -->
-<div id="ditriSplash" aria-hidden="true">
-  <img id="ditriSplashLogo" src="assets/splash-logo.png" alt="Ditri Trichology">
+<div id="ditriSplash">
+ <img src="logo-large.png">
 </div>
+<div id="appContent">
 
 
 <!-- Toast -->
@@ -3702,54 +3685,28 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="spacer"></div>
 </div>
 
+</div>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
-}
-</script>
+window.addEventListener('load',function(){
+ const splash=document.getElementById('ditriSplash');
+ const app=document.getElementById('appContent');
 
+ const delay=2500;
+ const fadeIn=3500;
+ const hold=2000;
+ const total=delay+fadeIn+hold;
 
-<script id="ditri-splash-script">
-  (function () {
-    const splash = document.getElementById('ditriSplash');
-    const logo = document.getElementById('ditriSplashLogo');
-    if (!splash || !logo) return;
+ setTimeout(function(){
+  splash.classList.add('hidden');
 
-    // Timeline (very slow):
-    // 0–1.5s: white screen
-    // 1.5–4.0s: logo fades in
-    // 4.0–5.5s: logo stays
-    // 5.5–7.5s: splash fades out, then removed
-    const FADE_IN_DELAY = 1500;
-    const FADE_IN_DURATION = 2500;
-    const HOLD_AFTER_IN = 1500;
-    const FADE_OUT_DURATION = 2000;
+  setTimeout(function(){
+   splash.remove();
+   app.classList.add('visible');
+  },4000);
 
-    const total = FADE_IN_DELAY + FADE_IN_DURATION + HOLD_AFTER_IN;
-
-    const start = () => {
-      // Ensure splash is visible
-      splash.classList.remove('hidden');
-
-      // Hide after full sequence
-      setTimeout(() => {
-        splash.classList.add('hidden');
-        setTimeout(() => {
-          try { splash.remove(); } catch(e) {}
-        }, FADE_OUT_DURATION + 150);
-      }, total);
-    };
-
-    // Start as soon as possible
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start, { once: true });
-
-    // Safety: if load never fires, still run
-    setTimeout(start, 800);
-  })();
+ },total);
+});
 </script>
 
 </body>
