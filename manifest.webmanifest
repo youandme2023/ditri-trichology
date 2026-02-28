@@ -1,7 +1,7 @@
 {
-  "name": "DiTri Trichology",
-  "short_name": "DiTri Tricho",
-  "start_url": "./index.html",
+  "name": "Ditri Trichology Studio",
+  "short_name": "DiTri",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
